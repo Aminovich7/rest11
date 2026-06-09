@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from shared.permissions import IsOwnerOrAdmin
+from shared.permissions import IsOwnerOrAdmin, IsSellerOwnerOrAdmin
 from .models import Review
 from .serializers import ReviewSerializer
 from drf_spectacular.utils import extend_schema, extend_schema_view
@@ -18,7 +18,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 )
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSellerOwnerOrAdmin]
 
     def get_queryset(self):
         if self.request.user.is_authenticated and self.request.user.user_role == "admin":
